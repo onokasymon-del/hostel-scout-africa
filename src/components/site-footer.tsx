@@ -37,7 +37,14 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>Help centre</li>
             <li>Report a hostel</li>
-            <li>Contact us</li>
+            <li>
+              <a
+                href="mailto:unistaybookings@gmail.com"
+                className="hover:text-foreground transition-colors"
+              >
+                unistaybookings@gmail.com
+              </a>
+            </li>
           </ul>
         </div>
       </div>
