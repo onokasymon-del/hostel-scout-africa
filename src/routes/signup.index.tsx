@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GraduationCap, Building2, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/signup")({
+export const Route = createFileRoute("/signup/")({
   head: () => ({
     meta: [
       { title: "Join UniStay — Create your account" },
