@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListHostelRouteImport } from './routes/list-hostel'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -21,6 +22,11 @@ import { Route as SignupStudentRouteImport } from './routes/signup.student'
 import { Route as SignupLandlordRouteImport } from './routes/signup.landlord'
 import { Route as HostelHostelIdRouteImport } from './routes/hostel.$hostelId'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/list-hostel'
     | '/login'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/list-hostel'
     | '/login'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/list-hostel'
     | '/login'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   ListHostelRoute: typeof ListHostelRoute
   LoginRoute: typeof LoginRoute
+  WishlistRoute: typeof WishlistRoute
   HostelHostelIdRoute: typeof HostelHostelIdRoute
   SignupLandlordRoute: typeof SignupLandlordRoute
   SignupStudentRoute: typeof SignupStudentRoute
@@ -175,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -263,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   ListHostelRoute: ListHostelRoute,
   LoginRoute: LoginRoute,
+  WishlistRoute: WishlistRoute,
   HostelHostelIdRoute: HostelHostelIdRoute,
   SignupLandlordRoute: SignupLandlordRoute,
   SignupStudentRoute: SignupStudentRoute,
@@ -271,3 +292,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
