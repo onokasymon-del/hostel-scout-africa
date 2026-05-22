@@ -49,7 +49,7 @@ function ReportPage() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    listHostels({}).then((res) => setHostels(res.items));
+    listHostels().then(setHostels);
   }, []);
 
   async function handleSubmit(e: FormEvent) {
