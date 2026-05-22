@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListHostelRouteImport } from './routes/list-hostel'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
@@ -35,6 +36,11 @@ const LoginRoute = LoginRouteImport.update({
 const ListHostelRoute = ListHostelRouteImport.update({
   id: '/list-hostel',
   path: '/list-hostel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/wishlist': typeof WishlistRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/wishlist': typeof WishlistRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/wishlist': typeof WishlistRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
     | '/wishlist'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
     | '/wishlist'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
     | '/wishlist'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
   DashboardRoute: typeof DashboardRoute
+  HelpRoute: typeof HelpRoute
   ListHostelRoute: typeof ListHostelRoute
   LoginRoute: typeof LoginRoute
   WishlistRoute: typeof WishlistRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/list-hostel'
       fullPath: '/list-hostel'
       preLoaderRoute: typeof ListHostelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -281,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
   DashboardRoute: DashboardRoute,
+  HelpRoute: HelpRoute,
   ListHostelRoute: ListHostelRoute,
   LoginRoute: LoginRoute,
   WishlistRoute: WishlistRoute,
