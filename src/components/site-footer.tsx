@@ -1,3 +1,5 @@
+import { Link } from "@tanstack/react-router";
+
 export function SiteFooter() {
   return (
     <footer className="mt-16 border-t border-border bg-secondary">
@@ -18,25 +20,25 @@ export function SiteFooter() {
         <div>
           <h3 className="text-sm font-semibold mb-3">For students</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>Browse hostels</li>
-            <li>Find a roommate</li>
-            <li>Wishlist</li>
-            <li>Reviews</li>
+            <li><Link to="/" className="hover:text-foreground transition-colors">Browse hostels</Link></li>
+            <li><Link to="/roommates" className="hover:text-foreground transition-colors">Find a roommate</Link></li>
+            <li><Link to="/wishlist" className="hover:text-foreground transition-colors">Wishlist</Link></li>
+            <li><Link to="/about" className="hover:text-foreground transition-colors">Reviews</Link></li>
           </ul>
         </div>
         <div>
           <h3 className="text-sm font-semibold mb-3">For landlords</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>List a hostel</li>
-            <li>Verification</li>
-            <li>Manage bookings</li>
+            <li><Link to="/list-hostel" className="hover:text-foreground transition-colors">List a hostel</Link></li>
+            <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Verification</Link></li>
+            <li><Link to="/dashboard" className="hover:text-foreground transition-colors">Manage bookings</Link></li>
           </ul>
         </div>
         <div>
           <h3 className="text-sm font-semibold mb-3">Support</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>Help centre</li>
-            <li>Report a hostel</li>
+            <li><Link to="/help" className="hover:text-foreground transition-colors">Help centre</Link></li>
+            <li><Link to="/report" className="hover:text-foreground transition-colors">Report a hostel</Link></li>
             <li>
               <a
                 href="mailto:unistaybookings@gmail.com"

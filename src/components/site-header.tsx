@@ -72,12 +72,13 @@ export function SiteHeader() {
 
         <div className="ml-auto md:ml-2 flex items-center gap-2">
           {isAuthenticated && <NotificationBell />}
-          <button
+          <Link
+            to="/wishlist"
             aria-label="Wishlist"
             className="hidden sm:inline-flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <Heart className="h-5 w-5" />
-          </button>
+          </Link>
           <Link
             to="/"
             hash="search"

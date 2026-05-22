@@ -9,8 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as RoommatesRouteImport } from './routes/roommates'
+import { Route as ReportRouteImport } from './routes/report'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListHostelRouteImport } from './routes/list-hostel'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
@@ -21,6 +25,21 @@ import { Route as SignupStudentRouteImport } from './routes/signup.student'
 import { Route as SignupLandlordRouteImport } from './routes/signup.landlord'
 import { Route as HostelHostelIdRouteImport } from './routes/hostel.$hostelId'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoommatesRoute = RoommatesRouteImport.update({
+  id: '/roommates',
+  path: '/roommates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -29,6 +48,11 @@ const LoginRoute = LoginRouteImport.update({
 const ListHostelRoute = ListHostelRouteImport.update({
   id: '/list-hostel',
   path: '/list-hostel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -83,8 +107,12 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -96,8 +124,12 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -110,8 +142,12 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
   '/dashboard': typeof DashboardRoute
+  '/help': typeof HelpRoute
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
+  '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
+  '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
   '/signup/student': typeof SignupStudentRoute
@@ -125,8 +161,12 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
+    | '/report'
+    | '/roommates'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -138,8 +178,12 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
+    | '/report'
+    | '/roommates'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -151,8 +195,12 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/dashboard'
+    | '/help'
     | '/list-hostel'
     | '/login'
+    | '/report'
+    | '/roommates'
+    | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
     | '/signup/student'
@@ -165,8 +213,12 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
   DashboardRoute: typeof DashboardRoute
+  HelpRoute: typeof HelpRoute
   ListHostelRoute: typeof ListHostelRoute
   LoginRoute: typeof LoginRoute
+  ReportRoute: typeof ReportRoute
+  RoommatesRoute: typeof RoommatesRoute
+  WishlistRoute: typeof WishlistRoute
   HostelHostelIdRoute: typeof HostelHostelIdRoute
   SignupLandlordRoute: typeof SignupLandlordRoute
   SignupStudentRoute: typeof SignupStudentRoute
@@ -175,6 +227,27 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roommates': {
+      id: '/roommates'
+      path: '/roommates'
+      fullPath: '/roommates'
+      preLoaderRoute: typeof RoommatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -187,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/list-hostel'
       fullPath: '/list-hostel'
       preLoaderRoute: typeof ListHostelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -261,8 +341,12 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
   DashboardRoute: DashboardRoute,
+  HelpRoute: HelpRoute,
   ListHostelRoute: ListHostelRoute,
   LoginRoute: LoginRoute,
+  ReportRoute: ReportRoute,
+  RoommatesRoute: RoommatesRoute,
+  WishlistRoute: WishlistRoute,
   HostelHostelIdRoute: HostelHostelIdRoute,
   SignupLandlordRoute: SignupLandlordRoute,
   SignupStudentRoute: SignupStudentRoute,

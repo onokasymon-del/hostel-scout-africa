@@ -61,6 +61,35 @@ export type Database = {
           },
         ]
       }
+      favorites: {
+        Row: {
+          created_at: string
+          hostel_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hostel_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hostel_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_hostel_id_fkey"
+            columns: ["hostel_id"]
+            isOneToOne: false
+            referencedRelation: "hostels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hostel_images: {
         Row: {
           created_at: string
@@ -86,6 +115,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "hostel_images_hostel_id_fkey"
+            columns: ["hostel_id"]
+            isOneToOne: false
+            referencedRelation: "hostels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hostel_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          details: string | null
+          hostel_id: string
+          id: string
+          reason: string
+          reporter_id: string
+          status: Database["public"]["Enums"]["report_status"]
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          hostel_id: string
+          id?: string
+          reason: string
+          reporter_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          details?: string | null
+          hostel_id?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hostel_reports_hostel_id_fkey"
             columns: ["hostel_id"]
             isOneToOne: false
             referencedRelation: "hostels"
@@ -355,6 +428,54 @@ export type Database = {
           },
         ]
       }
+      roommate_posts: {
+        Row: {
+          about: string
+          author_id: string
+          budget_max: number
+          campus_area: string | null
+          contact: string
+          created_at: string
+          gender_preference: string
+          id: string
+          institution_name: string
+          is_active: boolean
+          move_in_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          about: string
+          author_id: string
+          budget_max: number
+          campus_area?: string | null
+          contact: string
+          created_at?: string
+          gender_preference?: string
+          id?: string
+          institution_name: string
+          is_active?: boolean
+          move_in_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          about?: string
+          author_id?: string
+          budget_max?: number
+          campus_area?: string | null
+          contact?: string
+          created_at?: string
+          gender_preference?: string
+          id?: string
+          institution_name?: string
+          is_active?: boolean
+          move_in_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -445,6 +566,7 @@ export type Database = {
         | "message_received"
         | "verification_approved"
         | "verification_rejected"
+      report_status: "open" | "reviewing" | "resolved" | "dismissed"
       room_type: "single" | "shared" | "ensuite"
       verification_status: "pending" | "approved" | "rejected"
     }
@@ -594,6 +716,7 @@ export const Constants = {
         "verification_approved",
         "verification_rejected",
       ],
+      report_status: ["open", "reviewing", "resolved", "dismissed"],
       room_type: ["single", "shared", "ensuite"],
       verification_status: ["pending", "approved", "rejected"],
     },
