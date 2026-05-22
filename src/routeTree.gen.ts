@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
+import { Route as RoommatesRouteImport } from './routes/roommates'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListHostelRouteImport } from './routes/list-hostel'
@@ -27,6 +28,11 @@ import { Route as HostelHostelIdRouteImport } from './routes/hostel.$hostelId'
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoommatesRoute = RoommatesRouteImport.update({
+  id: '/roommates',
+  path: '/roommates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportRoute = ReportRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
   '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
   '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/list-hostel': typeof ListHostelRoute
   '/login': typeof LoginRoute
   '/report': typeof ReportRoute
+  '/roommates': typeof RoommatesRoute
   '/wishlist': typeof WishlistRoute
   '/hostel/$hostelId': typeof HostelHostelIdRoute
   '/signup/landlord': typeof SignupLandlordRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/list-hostel'
     | '/login'
     | '/report'
+    | '/roommates'
     | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/list-hostel'
     | '/login'
     | '/report'
+    | '/roommates'
     | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/list-hostel'
     | '/login'
     | '/report'
+    | '/roommates'
     | '/wishlist'
     | '/hostel/$hostelId'
     | '/signup/landlord'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   ListHostelRoute: typeof ListHostelRoute
   LoginRoute: typeof LoginRoute
   ReportRoute: typeof ReportRoute
+  RoommatesRoute: typeof RoommatesRoute
   WishlistRoute: typeof WishlistRoute
   HostelHostelIdRoute: typeof HostelHostelIdRoute
   SignupLandlordRoute: typeof SignupLandlordRoute
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/wishlist'
       fullPath: '/wishlist'
       preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/roommates': {
+      id: '/roommates'
+      path: '/roommates'
+      fullPath: '/roommates'
+      preLoaderRoute: typeof RoommatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/report': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListHostelRoute: ListHostelRoute,
   LoginRoute: LoginRoute,
   ReportRoute: ReportRoute,
+  RoommatesRoute: RoommatesRoute,
   WishlistRoute: WishlistRoute,
   HostelHostelIdRoute: HostelHostelIdRoute,
   SignupLandlordRoute: SignupLandlordRoute,
@@ -334,3 +355,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
