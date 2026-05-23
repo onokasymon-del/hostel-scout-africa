@@ -272,6 +272,19 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
   }
 
   const pendingCount = incoming.filter((b) => b.status === "pending").length;
+  const approvedCount = incoming.filter((b) => b.status === "approved").length;
+  const rejectedCount = incoming.filter((b) => b.status === "rejected").length;
+  const decided = approvedCount + rejectedCount;
+  const approvalRate = decided > 0 ? Math.round((approvedCount / decided) * 100) : null;
+  const liveCount = myHostels.filter((h) => h.is_published).length;
+  const totalSlots = myHostels.reduce((s, h) => s + (h.total_slots ?? 0), 0);
+  const slotsLeft = myHostels.reduce((s, h) => s + (h.slots_left ?? 0), 0);
+  const filledSlots = Math.max(totalSlots - slotsLeft, 0);
+  const ratedHostels = myHostels.filter((h) => (h.reviews_count ?? 0) > 0);
+  const avgRating =
+    ratedHostels.length > 0
+      ? ratedHostels.reduce((s, h) => s + (h.rating ?? 0), 0) / ratedHostels.length
+      : null;
   const showForm = creating || !!editing;
 
   return (
