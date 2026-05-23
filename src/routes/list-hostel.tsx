@@ -9,7 +9,11 @@ export const Route = createFileRoute("/list-hostel")({
         name: "description",
         content: "Reach thousands of verified students looking for a place to stay near their campus.",
       },
+      { property: "og:title", content: "List your hostel on UniStay" },
+      { property: "og:description", content: "Get bookings from verified Kenyan students. Free to list, verification required." },
+      { property: "og:url", content: "/list-hostel" },
     ],
+    links: [{ rel: "canonical", href: "/list-hostel" }],
   }),
   component: ListHostelPage,
 });
