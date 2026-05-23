@@ -380,6 +380,133 @@ function ReviewsPanel() {
   );
 }
 
+function ReportsPanel() {
+  const [items, setItems] = useState<HostelReportRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<"open" | "reviewing" | "resolved" | "dismissed" | "all">("open");
+
+  async function refresh() {
+    setLoading(true);
+    try {
+      setItems(await adminListReports());
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not load reports");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  async function setStatus(id: string, status: ReportStatus) {
+    let notes: string | undefined;
+    if (status === "resolved" || status === "dismissed") {
+      notes = window.prompt("Admin note (optional):") ?? undefined;
+    }
+    try {
+      await adminUpdateReport(id, status, notes);
+      toast.success(`Report ${status}`);
+      refresh();
+    } catch (err: any) {
+      toast.error(err?.message ?? "Could not update");
+    }
+  }
+
+  const filtered = items.filter((i) => filter === "all" || i.status === filter);
+
+  return (
+    <div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        {(["open", "reviewing", "resolved", "dismissed", "all"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`h-8 rounded-full px-3 text-xs font-semibold capitalize ${
+              filter === f ? "bg-foreground text-background" : "bg-muted text-foreground hover:bg-muted/70"
+            }`}
+          >
+            {f} ({items.filter((i) => f === "all" || i.status === f).length})
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <Loading />
+      ) : filtered.length === 0 ? (
+        <Empty title="No reports" body="Listings flagged by students show up here." />
+      ) : (
+        <div className="grid gap-3">
+          {filtered.map((r) => (
+            <article key={r.id} className="rounded-2xl border border-border bg-card p-4">
+              <header className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <Link
+                    to="/hostel/$hostelId"
+                    params={{ hostelId: r.hostels?.slug ?? r.hostel_id }}
+                    className="text-sm font-semibold hover:underline truncate block"
+                  >
+                    {r.hostels?.name ?? "Unknown hostel"}
+                  </Link>
+                  <p className="text-xs text-muted-foreground">
+                    {r.reason} • {new Date(r.created_at).toLocaleDateString("en-KE")}
+                  </p>
+                </div>
+                <span
+                  className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-semibold uppercase ${
+                    r.status === "open"
+                      ? "bg-accent/15 text-accent"
+                      : r.status === "reviewing"
+                      ? "bg-warning/15 text-foreground"
+                      : r.status === "resolved"
+                      ? "bg-success/15 text-success"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {r.status}
+                </span>
+              </header>
+
+              {r.details && <p className="mt-2 text-sm">{r.details}</p>}
+              {r.admin_notes && (
+                <p className="mt-2 rounded-lg bg-muted text-xs p-2">
+                  <span className="font-semibold">Admin note:</span> {r.admin_notes}
+                </p>
+              )}
+
+              {r.status !== "resolved" && r.status !== "dismissed" && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {r.status === "open" && (
+                    <button
+                      onClick={() => setStatus(r.id, "reviewing")}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-semibold hover:bg-muted"
+                    >
+                      Start review
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setStatus(r.id, "resolved")}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-full bg-success px-3 text-xs font-semibold text-success-foreground"
+                  >
+                    <CheckCircle2 className="h-3 w-3" /> Resolve
+                  </button>
+                  <button
+                    onClick={() => setStatus(r.id, "dismissed")}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-xs font-semibold"
+                  >
+                    <XCircle className="h-3 w-3" /> Dismiss
+                  </button>
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Tab({
   active,
   onClick,
