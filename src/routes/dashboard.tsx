@@ -562,3 +562,16 @@ function EmptyState({
     </div>
   );
 }
+
+function StatCard({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "accent" }) {
+  return (
+    <div
+      className={`rounded-2xl border p-4 ${
+        tone === "accent" ? "border-accent/40 bg-accent/10" : "border-border bg-card"
+      }`}
+    >
+      <p className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{label}</p>
+      <p className="mt-1 text-xl font-bold tracking-tight">{value}</p>
+    </div>
+  );
+}
