@@ -304,6 +304,19 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
         </div>
       )}
 
+      {myHostels.length > 0 && (
+        <div className="mb-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatCard label="Live listings" value={`${liveCount}/${myHostels.length}`} />
+          <StatCard label="Filled slots" value={`${filledSlots}/${totalSlots}`} />
+          <StatCard label="Pending bookings" value={String(pendingCount)} tone={pendingCount > 0 ? "accent" : "default"} />
+          <StatCard
+            label={avgRating !== null ? "Avg rating" : "Approval rate"}
+            value={avgRating !== null ? `⭐ ${avgRating.toFixed(1)}` : approvalRate !== null ? `${approvalRate}%` : "—"}
+          />
+        </div>
+      )}
+
+
       <div className="flex gap-2 border-b border-border overflow-x-auto">
         <TabButton active={tab === "hostels"} onClick={() => setTab("hostels")} icon={<Home className="h-4 w-4" />}>
           My hostels ({myHostels.length})
