@@ -272,6 +272,19 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
   }
 
   const pendingCount = incoming.filter((b) => b.status === "pending").length;
+  const approvedCount = incoming.filter((b) => b.status === "approved").length;
+  const rejectedCount = incoming.filter((b) => b.status === "rejected").length;
+  const decided = approvedCount + rejectedCount;
+  const approvalRate = decided > 0 ? Math.round((approvedCount / decided) * 100) : null;
+  const liveCount = myHostels.filter((h) => h.is_published).length;
+  const totalSlots = myHostels.reduce((s, h) => s + (h.total_slots ?? 0), 0);
+  const slotsLeft = myHostels.reduce((s, h) => s + (h.slots_left ?? 0), 0);
+  const filledSlots = Math.max(totalSlots - slotsLeft, 0);
+  const ratedHostels = myHostels.filter((h) => (h.reviews_count ?? 0) > 0);
+  const avgRating =
+    ratedHostels.length > 0
+      ? ratedHostels.reduce((s, h) => s + (h.rating ?? 0), 0) / ratedHostels.length
+      : null;
   const showForm = creating || !!editing;
 
   return (
@@ -290,6 +303,19 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
           </div>
         </div>
       )}
+
+      {myHostels.length > 0 && (
+        <div className="mb-5 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <StatCard label="Live listings" value={`${liveCount}/${myHostels.length}`} />
+          <StatCard label="Filled slots" value={`${filledSlots}/${totalSlots}`} />
+          <StatCard label="Pending bookings" value={String(pendingCount)} tone={pendingCount > 0 ? "accent" : "default"} />
+          <StatCard
+            label={avgRating !== null ? "Avg rating" : "Approval rate"}
+            value={avgRating !== null ? `⭐ ${avgRating.toFixed(1)}` : approvalRate !== null ? `${approvalRate}%` : "—"}
+          />
+        </div>
+      )}
+
 
       <div className="flex gap-2 border-b border-border overflow-x-auto">
         <TabButton active={tab === "hostels"} onClick={() => setTab("hostels")} icon={<Home className="h-4 w-4" />}>
@@ -533,6 +559,19 @@ function EmptyState({
           {cta.label}
         </Link>
       )}
+    </div>
+  );
+}
+
+function StatCard({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "accent" }) {
+  return (
+    <div
+      className={`rounded-2xl border p-4 ${
+        tone === "accent" ? "border-accent/40 bg-accent/10" : "border-border bg-card"
+      }`}
+    >
+      <p className="text-[11px] uppercase tracking-wide text-muted-foreground font-semibold">{label}</p>
+      <p className="mt-1 text-xl font-bold tracking-tight">{value}</p>
     </div>
   );
 }
