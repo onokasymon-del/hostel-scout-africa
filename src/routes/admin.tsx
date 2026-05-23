@@ -12,6 +12,7 @@ import {
   Home,
   Inbox,
   Star,
+  Flag,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +29,7 @@ import {
   type Hostel,
   type Review,
 } from "@/lib/hostels-api";
+import { adminListReports, adminUpdateReport, type HostelReportRow, type ReportStatus } from "@/lib/reports-api";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — UniStay" }] }),
@@ -67,7 +69,7 @@ function AdminPage() {
   return <AdminConsole />;
 }
 
-type Tab = "verifications" | "hostels" | "reviews";
+type Tab = "verifications" | "hostels" | "reviews" | "reports";
 
 function AdminConsole() {
   const [tab, setTab] = useState<Tab>("verifications");
@@ -77,7 +79,7 @@ function AdminConsole() {
         <ShieldCheck className="h-6 w-6 text-accent" />
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Admin panel</h1>
-          <p className="text-sm text-muted-foreground">Moderate verifications, hostels, and reviews.</p>
+          <p className="text-sm text-muted-foreground">Moderate verifications, hostels, reviews, and reports.</p>
         </div>
       </header>
 
@@ -91,12 +93,16 @@ function AdminConsole() {
         <Tab active={tab === "reviews"} onClick={() => setTab("reviews")} icon={<Star className="h-4 w-4" />}>
           Reviews
         </Tab>
+        <Tab active={tab === "reports"} onClick={() => setTab("reports")} icon={<Flag className="h-4 w-4" />}>
+          Reports
+        </Tab>
       </div>
 
       <div className="mt-6">
         {tab === "verifications" && <VerificationsPanel />}
         {tab === "hostels" && <HostelsPanel />}
         {tab === "reviews" && <ReviewsPanel />}
+        {tab === "reports" && <ReportsPanel />}
       </div>
     </div>
   );
