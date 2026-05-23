@@ -3,12 +3,16 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "How UniStay works" },
+      { title: "How UniStay works — Student hostels in Kenya" },
       {
         name: "description",
         content: "Learn how UniStay helps students book hostels and how landlords list their properties.",
       },
+      { property: "og:title", content: "How UniStay works" },
+      { property: "og:description", content: "Verified listings, student reviews and easy booking for hostels near Kenyan campuses." },
+      { property: "og:url", content: "/about" },
     ],
+    links: [{ rel: "canonical", href: "/about" }],
   }),
   component: AboutPage,
 });
