@@ -10,6 +10,7 @@ import {
   type InstitutionType,
 } from "@/data/institutions";
 import { toast } from "sonner";
+import { useRedirectIfAuthed } from "@/auth/use-redirect-if-authed";
 
 export const Route = createFileRoute("/signup/student")({
   head: () => ({
