@@ -26,6 +26,7 @@ const schema = z.object({
 });
 
 function LoginPage() {
+  useRedirectIfAuthed();
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [email, setEmail] = useState("");
