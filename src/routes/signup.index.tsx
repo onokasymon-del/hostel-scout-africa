@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GraduationCap, Building2, ArrowRight } from "lucide-react";
+import { useRedirectIfAuthed } from "@/auth/use-redirect-if-authed";
 
 export const Route = createFileRoute("/signup/")({
   head: () => ({
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/signup/")({
 });
 
 function SignupChooser() {
+  useRedirectIfAuthed();
   return (
     <div className="container-page max-w-3xl py-12">
       <div className="text-center">
