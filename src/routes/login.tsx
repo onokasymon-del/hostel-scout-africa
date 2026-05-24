@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
+import { useRedirectIfAuthed } from "@/auth/use-redirect-if-authed";
 
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -25,6 +26,7 @@ const schema = z.object({
 });
 
 function LoginPage() {
+  useRedirectIfAuthed();
   const navigate = useNavigate();
   const search = Route.useSearch();
   const [email, setEmail] = useState("");
