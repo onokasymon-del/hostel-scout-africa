@@ -36,6 +36,7 @@ const schema = z.object({
 });
 
 function StudentSignup() {
+  useRedirectIfAuthed();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     full_name: "",
