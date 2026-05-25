@@ -228,7 +228,7 @@ function StudentDashboard({ userId }: { userId: string }) {
 }
 
 function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified: boolean }) {
-  const [tab, setTab] = useState<"hostels" | "incoming" | "verification">("hostels");
+  const [tab, setTab] = useState<"hostels" | "incoming" | "analytics" | "verification">("hostels");
   const [incoming, setIncoming] = useState<IncomingBooking[]>([]);
   const [myHostels, setMyHostels] = useState<Hostel[]>([]);
   const [loading, setLoading] = useState(true);
