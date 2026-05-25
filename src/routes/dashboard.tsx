@@ -336,6 +336,8 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
       <div className="mt-6">
         {tab === "verification" ? (
           <VerificationCard landlordId={userId} />
+        ) : tab === "analytics" ? (
+          <LandlordAnalyticsPanel userId={userId} />
         ) : tab === "hostels" ? (
           showForm ? (
             <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
