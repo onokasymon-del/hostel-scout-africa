@@ -325,6 +325,9 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
         <TabButton active={tab === "incoming"} onClick={() => setTab("incoming")} icon={<Inbox className="h-4 w-4" />}>
           Bookings ({pendingCount} pending)
         </TabButton>
+        <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={<BarChart3 className="h-4 w-4" />}>
+          Analytics
+        </TabButton>
         <TabButton active={tab === "verification"} onClick={() => setTab("verification")} icon={<ShieldCheck className="h-4 w-4" />}>
           Verification
         </TabButton>
