@@ -18,12 +18,12 @@ import { Loader2, TrendingUp, Users, Heart, Star, DollarSign, BedDouble, Activit
 import { getLandlordAnalytics, type LandlordAnalytics } from "@/lib/hostels-api";
 import { formatPrice } from "@/lib/format";
 
-const COLORS = ["hsl(var(--accent))", "hsl(var(--primary))", "hsl(var(--success))", "hsl(var(--destructive))", "#8b5cf6", "#f59e0b"];
+const COLORS = ["var(--accent)", "var(--primary)", "var(--success)", "var(--destructive)", "#8b5cf6", "#f59e0b"];
 const STATUS_COLORS: Record<string, string> = {
-  approved: "hsl(var(--success))",
-  pending: "hsl(var(--accent))",
-  rejected: "hsl(var(--destructive))",
-  cancelled: "hsl(var(--muted-foreground))",
+  approved: "var(--success)",
+  pending: "var(--accent)",
+  rejected: "var(--destructive)",
+  cancelled: "var(--muted-foreground)",
 };
 
 type Range = 30 | 90 | 365;
@@ -190,13 +190,13 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
         <ChartCard title="Booking requests over time" className="lg:col-span-2">
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={timeSeries} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="label" stroke="hsl(var(--muted-foreground))" fontSize={11} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="label" stroke="var(--muted-foreground)" fontSize={11} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line type="monotone" dataKey="total" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} name="Requests" />
-              <Line type="monotone" dataKey="approved" stroke="hsl(var(--success))" strokeWidth={2} dot={false} name="Approved" />
+              <Line type="monotone" dataKey="total" stroke="var(--accent)" strokeWidth={2} dot={false} name="Requests" />
+              <Line type="monotone" dataKey="approved" stroke="var(--success)" strokeWidth={2} dot={false} name="Approved" />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -209,7 +209,7 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
               <PieChart>
                 <Pie data={statusData} dataKey="value" nameKey="name" innerRadius={50} outerRadius={90} paddingAngle={2}>
                   {statusData.map((d) => (
-                    <Cell key={d.name} fill={STATUS_COLORS[d.name] ?? "hsl(var(--muted))"} />
+                    <Cell key={d.name} fill={STATUS_COLORS[d.name] ?? "var(--muted)"} />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={tooltipStyle} />
@@ -228,13 +228,13 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={perHostelData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} />
-                <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={10} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="bookings" fill="hsl(var(--accent))" radius={[6, 6, 0, 0]} />
-                <Bar dataKey="wishlists" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="bookings" fill="var(--accent)" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="wishlists" fill="var(--primary)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -243,13 +243,13 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
         <ChartCard title="Occupancy (filled vs available)">
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={occupancyData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={10} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} allowDecimals={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={10} />
+              <YAxis stroke="var(--muted-foreground)" fontSize={11} allowDecimals={false} />
               <Tooltip contentStyle={tooltipStyle} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="filled" stackId="a" fill="hsl(var(--success))" radius={[0, 0, 0, 0]} />
-              <Bar dataKey="available" stackId="a" fill="hsl(var(--muted))" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="filled" stackId="a" fill="var(--success)" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="available" stackId="a" fill="var(--muted)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -263,14 +263,14 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
           ) : (
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={revenueData} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={11} />
-                <YAxis type="category" dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={11} width={120} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <XAxis type="number" stroke="var(--muted-foreground)" fontSize={11} />
+                <YAxis type="category" dataKey="name" stroke="var(--muted-foreground)" fontSize={11} width={120} />
                 <Tooltip
                   contentStyle={tooltipStyle}
                   formatter={(v: number) => formatPrice(v, currency)}
                 />
-                <Bar dataKey="revenue" fill="hsl(var(--accent))" radius={[0, 6, 6, 0]} />
+                <Bar dataKey="revenue" fill="var(--accent)" radius={[0, 6, 6, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}
@@ -353,8 +353,8 @@ export function LandlordAnalyticsPanel({ userId }: { userId: string }) {
 }
 
 const tooltipStyle = {
-  background: "hsl(var(--card))",
-  border: "1px solid hsl(var(--border))",
+  background: "var(--card)",
+  border: "1px solid var(--border)",
   borderRadius: 12,
   fontSize: 12,
 };
