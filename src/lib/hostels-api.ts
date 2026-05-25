@@ -546,3 +546,141 @@ export async function adminDeleteReview(id: string): Promise<void> {
   const { error } = await supabase.from("reviews").delete().eq("id", id);
   if (error) throw error;
 }
+
+// ---------------- Landlord analytics ----------------
+
+export interface AnalyticsBooking {
+  id: string;
+  hostel_id: string;
+  room_type: RoomType;
+  status: BookingStatus;
+  months: number;
+  created_at: string;
+  move_in_date: string;
+}
+
+export interface HostelPerformance {
+  hostel: Hostel;
+  bookings: number;
+  approved: number;
+  pending: number;
+  rejected: number;
+  cancelled: number;
+  wishlists: number;
+  revenue: number;
+  conversion: number; // approved / (approved+rejected+cancelled)
+  occupancy: number; // filled / total
+}
+
+export interface LandlordAnalytics {
+  hostels: Hostel[];
+  bookings: AnalyticsBooking[];
+  wishlistsByHostel: Record<string, number>;
+  performance: HostelPerformance[];
+  totals: {
+    listings: number;
+    liveListings: number;
+    totalBookings: number;
+    approvedBookings: number;
+    pendingBookings: number;
+    totalWishlists: number;
+    projectedRevenue: number;
+    avgRating: number | null;
+    totalReviews: number;
+    occupancy: number; // overall filled/total
+  };
+}
+
+export async function getLandlordAnalytics(landlordId: string): Promise<LandlordAnalytics> {
+  const hostels = await listMyHostels(landlordId);
+  const ids = hostels.map((h) => h.id);
+  if (ids.length === 0) {
+    return {
+      hostels: [],
+      bookings: [],
+      wishlistsByHostel: {},
+      performance: [],
+      totals: {
+        listings: 0,
+        liveListings: 0,
+        totalBookings: 0,
+        approvedBookings: 0,
+        pendingBookings: 0,
+        totalWishlists: 0,
+        projectedRevenue: 0,
+        avgRating: null,
+        totalReviews: 0,
+        occupancy: 0,
+      },
+    };
+  }
+
+  const [{ data: bRows, error: bErr }, { data: wRows, error: wErr }] = await Promise.all([
+    supabase
+      .from("bookings")
+      .select("id, hostel_id, room_type, status, months, created_at, move_in_date")
+      .in("hostel_id", ids)
+      .order("created_at", { ascending: false }),
+    supabase.from("wishlist").select("hostel_id").in("hostel_id", ids),
+  ]);
+  if (bErr) throw bErr;
+  if (wErr) throw wErr;
+
+  const bookings = (bRows ?? []) as AnalyticsBooking[];
+  const wishlistsByHostel: Record<string, number> = {};
+  for (const w of wRows ?? []) {
+    const id = (w as any).hostel_id as string;
+    wishlistsByHostel[id] = (wishlistsByHostel[id] ?? 0) + 1;
+  }
+
+  const performance: HostelPerformance[] = hostels.map((h) => {
+    const hb = bookings.filter((b) => b.hostel_id === h.id);
+    const approved = hb.filter((b) => b.status === "approved");
+    const pending = hb.filter((b) => b.status === "pending").length;
+    const rejected = hb.filter((b) => b.status === "rejected").length;
+    const cancelled = hb.filter((b) => b.status === "cancelled").length;
+    const decided = approved.length + rejected + cancelled;
+    const revenue = approved.reduce((s, b) => s + h.price_per_month * b.months, 0);
+    const filled = Math.max((h.total_slots ?? 0) - (h.slots_left ?? 0), 0);
+    return {
+      hostel: h,
+      bookings: hb.length,
+      approved: approved.length,
+      pending,
+      rejected,
+      cancelled,
+      wishlists: wishlistsByHostel[h.id] ?? 0,
+      revenue,
+      conversion: decided > 0 ? approved.length / decided : 0,
+      occupancy: h.total_slots > 0 ? filled / h.total_slots : 0,
+    };
+  });
+
+  const totalSlots = hostels.reduce((s, h) => s + (h.total_slots ?? 0), 0);
+  const filledSlots = hostels.reduce(
+    (s, h) => s + Math.max((h.total_slots ?? 0) - (h.slots_left ?? 0), 0),
+    0,
+  );
+  const rated = hostels.filter((h) => (h.reviews_count ?? 0) > 0);
+  const avgRating =
+    rated.length > 0 ? rated.reduce((s, h) => s + (h.rating ?? 0), 0) / rated.length : null;
+
+  return {
+    hostels,
+    bookings,
+    wishlistsByHostel,
+    performance,
+    totals: {
+      listings: hostels.length,
+      liveListings: hostels.filter((h) => h.is_published).length,
+      totalBookings: bookings.length,
+      approvedBookings: bookings.filter((b) => b.status === "approved").length,
+      pendingBookings: bookings.filter((b) => b.status === "pending").length,
+      totalWishlists: Object.values(wishlistsByHostel).reduce((s, n) => s + n, 0),
+      projectedRevenue: performance.reduce((s, p) => s + p.revenue, 0),
+      avgRating,
+      totalReviews: hostels.reduce((s, h) => s + (h.reviews_count ?? 0), 0),
+      occupancy: totalSlots > 0 ? filledSlots / totalSlots : 0,
+    },
+  };
+}

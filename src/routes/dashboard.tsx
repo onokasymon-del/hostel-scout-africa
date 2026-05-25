@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Loader2, CheckCircle2, XCircle, Clock, Heart, Home, Inbox, Plus, Pencil, Trash2, ShieldCheck, MessageSquare } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, Clock, Heart, Home, Inbox, Plus, Pencil, Trash2, ShieldCheck, MessageSquare, BarChart3 } from "lucide-react";
+import { LandlordAnalyticsPanel } from "@/components/landlord-analytics";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/auth/auth-context";
@@ -227,7 +228,7 @@ function StudentDashboard({ userId }: { userId: string }) {
 }
 
 function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified: boolean }) {
-  const [tab, setTab] = useState<"hostels" | "incoming" | "verification">("hostels");
+  const [tab, setTab] = useState<"hostels" | "incoming" | "analytics" | "verification">("hostels");
   const [incoming, setIncoming] = useState<IncomingBooking[]>([]);
   const [myHostels, setMyHostels] = useState<Hostel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -324,6 +325,9 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
         <TabButton active={tab === "incoming"} onClick={() => setTab("incoming")} icon={<Inbox className="h-4 w-4" />}>
           Bookings ({pendingCount} pending)
         </TabButton>
+        <TabButton active={tab === "analytics"} onClick={() => setTab("analytics")} icon={<BarChart3 className="h-4 w-4" />}>
+          Analytics
+        </TabButton>
         <TabButton active={tab === "verification"} onClick={() => setTab("verification")} icon={<ShieldCheck className="h-4 w-4" />}>
           Verification
         </TabButton>
@@ -332,6 +336,8 @@ function LandlordDashboard({ userId, isVerified }: { userId: string; isVerified:
       <div className="mt-6">
         {tab === "verification" ? (
           <VerificationCard landlordId={userId} />
+        ) : tab === "analytics" ? (
+          <LandlordAnalyticsPanel userId={userId} />
         ) : tab === "hostels" ? (
           showForm ? (
             <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
