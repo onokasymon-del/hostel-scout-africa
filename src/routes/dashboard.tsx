@@ -42,7 +42,12 @@ const STATUS_STYLES: Record<BookingStatus, string> = {
 };
 
 function DashboardPage() {
-  const { profile, user, loading } = useAuth();
+  const { profile, user, loading, refreshProfile } = useAuth();
+
+  useEffect(() => {
+    refreshProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading || !profile || !user) {
     return (
