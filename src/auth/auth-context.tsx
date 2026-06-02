@@ -34,14 +34,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<AuthProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, full_name, phone, role, institution_type, institution_name, avatar_url, is_verified")
-      .eq("id", userId)
-      .maybeSingle();
-    setProfile((data as AuthProfile | null) ?? null);
+  const loadProfile = async (_userId: string) => {
+    const { data } = await supabase.rpc("get_my_profile");
+    const row = Array.isArray(data) ? data[0] : data;
+    setProfile((row as AuthProfile | null) ?? null);
   };
+
 
   useEffect(() => {
     // 1) subscribe FIRST
