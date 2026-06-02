@@ -199,9 +199,10 @@ export async function listIncomingBookings(landlordId: string): Promise<Incoming
   if (studentIds.length > 0) {
     const { data: pr } = await supabase
       .from("profiles")
-      .select("id, full_name, phone")
+      .select("id, full_name")
       .in("id", studentIds);
-    for (const p of pr ?? []) profiles[p.id] = p as any;
+    for (const p of pr ?? []) profiles[p.id] = { ...(p as any), phone: null };
+
   }
   return (data ?? []).map((b: any) => ({
     ...b,
