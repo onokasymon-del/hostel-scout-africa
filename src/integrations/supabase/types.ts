@@ -531,6 +531,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_contact_phone: { Args: { _profile_id: string }; Returns: string }
+      get_my_profile: {
+        Args: never
+        Returns: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          institution_name: string | null
+          institution_type:
+            | Database["public"]["Enums"]["institution_type"]
+            | null
+          is_verified: boolean
+          phone: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_approved_booking: {
         Args: { _hostel_id: string; _student_id: string }
         Returns: boolean
