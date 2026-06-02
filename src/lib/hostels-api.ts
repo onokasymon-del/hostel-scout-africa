@@ -486,10 +486,11 @@ export async function adminListVerifications(): Promise<VerificationWithLandlord
   const ids = Array.from(new Set(rows.map((r) => r.landlord_id)));
   const { data: profs } = await supabase
     .from("profiles")
-    .select("id, full_name, phone, institution_name")
+    .select("id, full_name, institution_name")
     .in("id", ids);
   const map: Record<string, any> = {};
-  for (const p of profs ?? []) map[p.id] = p;
+  for (const p of profs ?? []) map[p.id] = { ...p, phone: null };
+
   return rows.map((r) => ({
     ...r,
     landlord: map[r.landlord_id] ?? {
